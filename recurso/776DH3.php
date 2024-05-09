@@ -30,7 +30,7 @@ $var = $array['GetUserTokenResult']['token'];
 
 $wialon_api = new Wialon();
   // old username and password login is deprecated, use token login
-$token = 'c8c5897e3a64b236485f6ffce95184a857FDEA83EA59A8F54D9F05D5C16C6DADECC86D46';
+$token = 'c8c5897e3a64b236485f6ffce95184a8603F5892C277F78E16BB07F1FE63E8B714E5F6C0';
 $result = $wialon_api->login($token);
 //echo '<pre>'; print_r($result); echo '</pre>';
 $json = json_decode($result, true);
