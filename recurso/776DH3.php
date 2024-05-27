@@ -51,7 +51,7 @@ if(!isset($json['error'])){
 		'force' => 1,
 		'from' => 0,
 		'to' => 0,
-		'flags' => 4194304
+		'flags' => 4194305
 
 	);
 
