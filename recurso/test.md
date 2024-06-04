@@ -1,7 +1,7 @@
 <?php
 
 $self = $_SERVER['PHP_SELF'];
-header("refresh:500; url=$self"); //Refrescamos cada 180 segundos
+header("refresh:60; url=$self"); //Refrescamos cada 180 segundos
 
 include '../wialon/wialon.php';
 
@@ -32,7 +32,7 @@ $var = $array['GetUserTokenResult']['token'];
 
 //INICIA LA CONTENXION CON WIALON PARA OBTENER LA LATITUD, LONGITUD Y VELOCIDAD DE UNIDADES MEDIANTE EL TOKEN OBETNIDO DE WIALON 
 
-$wialon_api = new Wialon();// SE LLAMA A LA API DE WAILON PARA COMENZAR LA CONEXION 
+$wialon_api = new Wialon();// SE LLAMA A LA API DE WIALON PARA COMENZAR LA CONEXION 
 
 $token = 'c8c5897e3a64b236485f6ffce95184a8603F5892C277F78E16BB07F1FE63E8B714E5F6C0';
 
@@ -56,7 +56,7 @@ if(!isset($json['error'])){
         'flags' => 4194305
     );
 
-    // SE COMIENZA CON LA BUSQUEDA DE LOS ITEMS  SOLICITADOS  PARA QUE SEAN EN TIEMPO REAL Y NO PONER LOS PARAMETROS QUE NOSOTROS ESCRIBAMOS 
+    // SE COMIENZA CON LA BUSQUEDA DE LOS ITEMS SOLICITADOS PARA QUE SEAN EN TIEMPO REAL Y NO PONER LOS PARAMETROS QUE NOSOTROS ESCRIBAMOS 
     $data = $wialon_api->core_search_items($param);
     $resultado = json_decode($data, true);
     //echo '<pre>'; print_r($resultado); echo '</pre>';
@@ -72,32 +72,29 @@ if(!isset($json['error'])){
             return null;
         }
 
-        $asset = '643AJ7';
+        $asset = '01AY8W';
         $vehiculo = buscarActivoPorId($resultado['items'], $asset);
 
         if ($vehiculo) {
-            
             $latitude = $vehiculo['pos']['y'];
             $longitude = $vehiculo['pos']['x'];
             $velocidad = $vehiculo['pos']['s'];
             $placa = $vehiculo['nm']; // Aquí se obtiene la placa
             $time = gmdate('Y-m-d\TH:i:s', time()); // SE OBTIENE LA FECHA Y HORA EN FORMATO UTC 0
 
-        //    // Crear un array con todos los datos de la unidad
-        //    $datosUnidad = array(
-        //     // 'Placa' => $placa,
-        //     // 'Latitud' => $latitude,
-        //     // 'Longitud' => $longitude,
-        //     // 'Velocidad' => $velocidad,
-        //     // 'Hora' => $time,
-        //     'OtrosDatos' => $vehiculo // Incluye todos los demás datos del vehículo
-        // );
-        
-        // // Imprimir los datos de la unidad de manera estructurada
-        // echo '<h3>Datos de la Unidad</h3>';
-        // echo '<pre>'; print_r($datosUnidad); echo '</pre>';
-
-        
+            // Crear un array con todos los datos de la unidad
+            $datosUnidad = array(
+                // 'Placa' => $placa,
+                // 'Latitud' => $latitude,
+                // 'Longitud' => $longitude,
+                // 'Velocidad' => $velocidad,
+                // 'Hora' => $time,
+                'OtrosDatos' => $vehiculo // Incluye todos los demás datos del vehículo
+            );
+            
+            // Imprimir los datos de la unidad de manera estructurada
+            echo '<h3>Datos de la Unidad</h3>';
+            echo '<pre>'; print_r($datosUnidad); echo '</pre>';
         } else {
             // Manejar el caso donde el vehículo no se encuentra
             echo "Vehículo con identificador $asset no encontrado.";
@@ -105,7 +102,7 @@ if(!isset($json['error'])){
 
     }
 
-    $wialon_api->logout(); // SE CIERRA SESION CON WAILON API 
+    $wialon_api->logout(); // SE CIERRA SESION CON WIALON API 
 } else {
     echo WialonError::error($json['error']); // SI HAY ERROR SE IMPRIME EL ERROR 
 }
@@ -113,16 +110,16 @@ if(!isset($json['error'])){
 /* nm  = Dominio*/
 /* latitude  = y*/
 /* longitud = x*/
-/* altitud  = z*/
+/* altitud = z*/
 
 $token = $var;
 $altitude = '0';
-// $asset = '643AJ7';
+$asset = '01AY8W';
 $battery = '0';
 $code = '1';
 $course = '0';
-$id = '';
-$name = 'PATINO HERRERA ANTONIO';
+$id = '41013';
+$name = 'FREDDY VERA GARCIA';
 $date = $time;
 $direction = '0';
 $ignition = false;
