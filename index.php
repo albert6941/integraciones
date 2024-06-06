@@ -1,22 +1,24 @@
 <?php
-$self = htmlspecialchars($_SERVER['PHP_SELF']);
+$self = $_SERVER['PHP_SELF'];
 header("refresh:60; url=$self"); // Refresca cada 60 segundos
 
-// Cargar la API de Wialon
+// Carga segura del archivo de configuración
+require_once 'config.php'; 
+
 include 'wialon/wialon.php';
 
-$wialon_api = new Wialon();
-
-// Leer el token desde una variable de entorno
-$token = getenv('WIALON_TOKEN') ?: 'ruta_a_tu_archivo_seguro';
-if (!$token) {
-    die(json_encode(['error' => 'Token no disponible']));
+// Verifica que el token esté definido en el archivo de configuración
+if (!defined('WIALON_TOKENABC') || empty(WIALON_TOKENABC)) {
+    die(json_encode(['error' => 'Token no definido.']));
 }
 
-// Validar y sanitizar las placas (aunque en este caso parece que son estáticas)
-$placas = array_map('htmlspecialchars', ['', '']);
+$wialon_api = new Wialon();
+$token = WIALON_TOKENABC;
 
-$result = $wialon_api->login($token); // Iniciar sesión en Wialon
+// Si las placas están vacías, se ignoran
+$placas = array_filter(['', '']);
+
+$result = $wialon_api->login($token);
 $json_response = array();
 
 if (!isset($result['error'])) {
@@ -45,11 +47,11 @@ if (!isset($result['error'])) {
             if (isset($unit['nm']) && in_array($unit['nm'], $placas)) {
                 $found_units = true;
                 $unit_data = array(
-                    'name' => htmlspecialchars($unit['nm']),
-                    'id' => isset($unit['id']) ? htmlspecialchars($unit['id']) : 'ID no disponible',
-                    'latitude' => isset($unit['pos']['y']) ? htmlspecialchars($unit['pos']['y']) : 'No disponible',
-                    'longitude' => isset($unit['pos']['x']) ? htmlspecialchars($unit['pos']['x']) : 'No disponible',
-                    'speed' => isset($unit['pos']['s']) ? htmlspecialchars($unit['pos']['s']) : 'No disponible',
+                    'name' => $unit['nm'],
+                    'id' => isset($unit['id']) ? $unit['id'] : 'ID no disponible',
+                    'latitude' => isset($unit['pos']['y']) ? $unit['pos']['y'] : 'No disponible',
+                    'longitude' => isset($unit['pos']['x']) ? $unit['pos']['x'] : 'No disponible',
+                    'speed' => isset($unit['pos']['s']) ? $unit['pos']['s'] : 'No disponible',
                     'timestamp' => isset($unit['pos']['t']) ? gmdate('Y-m-d\TH:i:s', $unit['pos']['t']) : 'No disponible'
                 );
                 $units_data[] = $unit_data;
@@ -59,18 +61,18 @@ if (!isset($result['error'])) {
         if (!$found_units) {
             foreach ($resultado['items'] as $unit) {
                 $unit_data = array(
-                    'name' => htmlspecialchars($unit['nm']),
-                    'id' => isset($unit['id']) ? htmlspecialchars($unit['id']) : 'ID no disponible',
-                    'latitude' => isset($unit['pos']['y']) ? htmlspecialchars($unit['pos']['y']) : 'No disponible',
-                    'longitude' => isset($unit['pos']['x']) ? htmlspecialchars($unit['pos']['x']) : 'No disponible',
-                    'speed' => isset($unit['pos']['s']) ? htmlspecialchars($unit['pos']['s']) : 'No disponible',
+                    'name' => $unit['nm'],
+                    'id' => isset($unit['id']) ? $unit['id'] : 'ID no disponible',
+                    'latitude' => isset($unit['pos']['y']) ? $unit['pos']['y'] : 'No disponible',
+                    'longitude' => isset($unit['pos']['x']) ? $unit['pos']['x'] : 'No disponible',
+                    'speed' => isset($unit['pos']['s']) ? $unit['pos']['s'] : 'No disponible',
                     'timestamp' => isset($unit['pos']['t']) ? gmdate('Y-m-d\TH:i:s', $unit['pos']['t']) : 'No disponible'
                 );
                 $units_data[] = $unit_data;
             }
         }
 
-        $json_response['units'] = $units_data;
+        $json_response['unidades'] = $units_data;
         $wialon_api->logout();
     } else {
         $json_response['error'] = $resultado['error'];
@@ -80,11 +82,6 @@ if (!isset($result['error'])) {
 }
 
 header('Content-Type: application/json');
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
-header('X-XSS-Protection: 1; mode=block');
-header('Content-Security-Policy: default-src \'self\'');
-
 echo json_encode($json_response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-?>
 
+?>

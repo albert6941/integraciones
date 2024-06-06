@@ -1,12 +1,16 @@
 <?php
 
 $self = $_SERVER['PHP_SELF'];
-header("refresh:500; url=$self"); //Refrescamos cada 180 segundos
+header("refresh:300; url=$self"); //Refrescamos cada 300 segundos dando un total de 5 minutos 
+
+// Incluimos el archivo de configuración
+include '../config.php';
 
 include '../wialon/wialon.php';
 
-$userId = "ws_avl_alltran";
-$password= "PZZa*405Caaw_2";
+// Accedemos a las credenciales SOAP
+$userId = USER_ID;
+$password = PASSWORD;
 
 try {
     $soapclient = new SoapClient('http://gps.rcontrol.com.mx/Tracking/wcf/RCService.svc?wsdl');
@@ -15,27 +19,23 @@ try {
 
     echo '<br><br><br>';
     $array = json_decode(json_encode($response), true);
-    //echo '<pre>'; print_r($array); echo '</pre>';
 
     echo '<br><br><br>';
     echo '<br><br><br>';
     foreach ($array as $item) {
-        //echo '<pre>'; var_dump($item);
+    
     }
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 $result = $array;
-//echo '<pre>'; print_r($result); echo '</pre>';
-$var = $array['GetUserTokenResult']['token'];
-//echo '<pre>'; print_r($var); echo '</pre>';
 
+$var = $array['GetUserTokenResult']['token'];
 //INICIA LA CONTENXION CON WIALON PARA OBTENER LA LATITUD, LONGITUD Y VELOCIDAD DE UNIDADES MEDIANTE EL TOKEN OBETNIDO DE WIALON 
 
 $wialon_api = new Wialon();// SE LLAMA A LA API DE WAILON PARA COMENZAR LA CONEXION 
 
-$token = 'c8c5897e3a64b236485f6ffce95184a8603F5892C277F78E16BB07F1FE63E8B714E5F6C0';
-
+$token = WIALON_TOKENRC;
 $result = $wialon_api->login($token);
 //echo '<pre>'; print_r($result); echo '</pre>';
 $json = json_decode($result, true);
