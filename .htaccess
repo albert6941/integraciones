@@ -1,0 +1,81 @@
+# Establecer variable de entorno para el token
+SetEnv WIALON_TOKEN 921293c514170405a1dc5aaf3916c25c714CC6A94AC5813BEB9FF0B251339BC6782CF0D3
+
+# Configuraciones de seguridad
+
+# Proteger .htaccess de ser visto
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Proteger archivos sensibles (config.php, etc.)
+<FilesMatch "(^.*\.(ini|log|sh|inc|bak|sql|config|env))$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Desactivar listados de directorios
+Options -Indexes
+
+# Prevenir ataques XSS y otras inyecciones de código
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header always append X-Content-Security-Policy "default-src 'self'"
+</IfModule>
+
+# Limitar el tamaño de las subidas de archivos
+<IfModule mod_php7.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+</IfModule>
+
+# Reescritura de URL (si usas mod_rewrite)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Opcional: Redirigir todas las peticiones HTTP a HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Ejemplo de reescritura básica
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+</IfModule>
+
+# Configuración de la caché
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+</IfModule>
+
+# Desactivar la ejecución de scripts en el directorio recurso
+<Directory "/var/www/html/recurso">
+    RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phps
+    RemoveType .php .phtml .php3 .php4 .php5 .php7 .phps
+</Directory>
+
+# Desactivar la ejecución de scripts en el directorio recurso
+<Directory "/var/www/html/FOX">
+    RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phps
+    RemoveType .php .phtml .php3 .php4 .php5 .php7 .phps
+</Directory>
+
+# Desactivar la ejecución de scripts en el directorio wialon
+<Directory "/var/www/html/wialon">
+    RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phps
+    RemoveType .php .phtml .php3 .php4 .php5 .php7 .phps
+</Directory>
