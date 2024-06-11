@@ -21,3 +21,22 @@
     Require all denied
 </Files>
 
+# Configuraciones PHP para mejorar la seguridad
+
+# Deshabilitar el registro de variables globales
+php_flag register_globals off
+
+# Deshabilitar la visualización de errores
+php_flag display_errors off
+php_flag display_startup_errors off
+
+# Deshabilitar los errores en formato HTML
+php_flag html_errors off
+
+# Configuración para no mostrar referencias a la documentación de PHP en errores
+php_value docref_root 0
+php_value docref_ext 0
+
+# Deshabilitar la apertura de URL con funciones de manipulación de archivos
+php_flag allow_url_fopen off
+php_flag allow_url_include off
