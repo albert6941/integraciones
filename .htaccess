@@ -1,5 +1,4 @@
 # Configuraciones de seguridad
-
 <IfModule mod_headers.c>
     # Prevenir ataques XSS y otras inyecciones de código
     Header set X-XSS-Protection "1; mode=block"
@@ -40,3 +39,36 @@ php_value docref_ext 0
 # Deshabilitar la apertura de URL con funciones de manipulación de archivos
 php_flag allow_url_fopen off
 php_flag allow_url_include off
+
+# Deshabilitar funciones PHP peligrosas
+php_value disable_functions exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source
+
+# Deshabilitar la ejecución de PHP en el directorio de cargas de usuario
+<Directory "/path/to/uploads">
+    php_admin_flag engine off
+</Directory>
+
+# Proteger el archivo .htaccess
+<Files ".htaccess">
+    Require all denied
+</Files>
+
+# Bloquear acceso a archivos sensibles
+<FilesMatch "(^#.*#|\.ini$|\.log$|\.sh$|\.inc$|\.sql$|\.bak$|\.old$|\.orig$|~$|\.save$|\.swp$|\.phar$|composer\.(json|lock))">
+    Require all denied
+</FilesMatch>
+
+# Deshabilitar el listado de directorios
+Options -Indexes
+
+# Limitar el acceso al área de administración
+<Directory "/path/to/admin">
+    Require ip xxx.xxx.xxx.xxx
+    Require ip yyy.yyy.yyy.yyy
+</Directory>
+
+# Limitar el tamaño de las subidas y el tiempo de ejecución
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+php_value max_execution_time 300
+php_value max_input_time 300
