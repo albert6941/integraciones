@@ -40,3 +40,42 @@ php_value docref_ext 0
 # Deshabilitar la apertura de URL con funciones de manipulación de archivos
 php_flag allow_url_fopen off
 php_flag allow_url_include off
+
+# Protección contra la ejecución de scripts PHP en directorios específicos
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquear la ejecución de scripts PHP en directorios de carga de archivos
+    RewriteRule ^uploads/(.*)\.php$ - [F,L]
+    RewriteRule ^files/(.*)\.php$ - [F,L]
+
+    # Denegar acceso a ciertos archivos sensibles
+    RewriteRule ^(\.htaccess|\.htpasswd|config\.php|README|LICENSE)$ - [F,L]
+</IfModule>
+
+# Restringir el acceso a archivos del sistema
+<FilesMatch "\.(htaccess|htpasswd|ini|phar|sh|bat|ps1|json|log)$">
+    Require all denied
+</FilesMatch>
+
+# Bloquear bots maliciosos y User-Agents conocidos
+<IfModule mod_setenvif.c>
+    SetEnvIfNoCase User-Agent "libwww-perl" bad_bot
+    SetEnvIfNoCase User-Agent "MJ12bot" bad_bot
+    SetEnvIfNoCase User-Agent "AhrefsBot" bad_bot
+    SetEnvIfNoCase User-Agent "wget" bad_bot
+    SetEnvIfNoCase User-Agent "curl" bad_bot
+    <RequireAll>
+        Require all granted
+        Require not env bad_bot
+    </RequireAll>
+</IfModule>
+
+# Protección adicional contra inyección de código y otros ataques
+<IfModule mod_rewrite.c>
+    RewriteCond %{QUERY_STRING} (\.\./|\.\%2e\%2e|boot\.ini|winnt|etc/passwd|self/environ) [NC]
+    RewriteRule .* - [F,L]
+
+    RewriteCond %{QUERY_STRING} (\<|\"|\'|\;|\?|\.js|\.css|base64|(\%27)|(\%22)|(\%3C)|(\%3E)|(\%00)|(\%2e\%2e)) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
