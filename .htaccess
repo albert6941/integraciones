@@ -54,7 +54,7 @@ php_flag allow_url_include off
 </IfModule>
 
 # Restringir el acceso a archivos del sistema
-<FilesMatch "\.(htaccess|htpasswd|ini|phar|sh|bat|ps1|json|log)$">
+<FilesMatch "\.(htaccess|htpasswd|ini|phar|sh|bat|ps1|log)$">
     Require all denied
 </FilesMatch>
 
@@ -64,7 +64,7 @@ php_flag allow_url_include off
     SetEnvIfNoCase User-Agent "MJ12bot" bad_bot
     SetEnvIfNoCase User-Agent "AhrefsBot" bad_bot
     SetEnvIfNoCase User-Agent "wget" bad_bot
-    SetEnvIfNoCase User-Agent "curl" bad_bot
+#SetEnvIfNoCase User-Agent "curl" bad_bot
     <RequireAll>
         Require all granted
         Require not env bad_bot
