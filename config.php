@@ -1,19 +1,20 @@
 <?php
 
-// Credenciales para la API SOAP FREDDY
-define('SOAP_USER_ID', 'ws_avl_alltran');
+// Credenciales para la API
+define('SOAP_USER_ID', 'tu_usuario_aqui');
 define('SOAP_PASSWORD', 'passwordaqui');
 
-// Credenciales para la API SOAP Patino Herrea
-define('USER_ID', 'user_SOS_TAMSA');
+// Credenciales para la API SOAP
+//lasda recurso confiable 
+define('USER_ID', 'tu_usuario_aqui');
 define('PASSWORD', 'passwordaqui');
 
 
 // Token para la API de Wialon Recurso confiable
-//aqui va el token que se descarga de la pagina y estos cambian cada 30 dias por lo que s imprtante estar generandolos 
-define('WIALON_TOKENRC', 'c8c5897e3a64b236485f6ffce95184a8603F5892C277F78E16BB07F1FE63E8B714E5F6C0');
+//aqui va el token que se descarga de la pagina y estos cambian cada 30 dias por lo que es imprtante estar generandolos son de 72 caracteres 
+define('WIALON_TOKENRC', 'token_Wialon_aqui');
 
 
 // Token para la API de WIALON ABC
-define('WIALON_TOKENABC', '921293c514170405a1dc5aaf3916c25c714CC6A94AC5813BEB9FF0B251339BC6782CF0D3');
+define('WIALON_TOKENABC', 'token_Wialon_aqui');
 ?>
