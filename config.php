@@ -2,14 +2,15 @@
 
 // Credenciales para la API SOAP FREDDY
 define('SOAP_USER_ID', 'ws_avl_alltran');
-define('SOAP_PASSWORD', 'PZZa*405Caaw_2');
+define('SOAP_PASSWORD', 'passwordaqui');
 
 // Credenciales para la API SOAP Patino Herrea
 define('USER_ID', 'user_SOS_TAMSA');
-define('PASSWORD', 'jOfi&/117neZm&&3');
+define('PASSWORD', 'passwordaqui');
 
 
 // Token para la API de Wialon Recurso confiable
+//aqui va el token que se descarga de la pagina y estos cambian cada 30 dias por lo que s imprtante estar generandolos 
 define('WIALON_TOKENRC', 'c8c5897e3a64b236485f6ffce95184a8603F5892C277F78E16BB07F1FE63E8B714E5F6C0');
 
 
